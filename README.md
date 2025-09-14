@@ -63,7 +63,7 @@ If the "Setup.exe" fails or the desktop shortcut doesn't work, follow these step
     * In the "Shortcut" tab, locate the "Target" field.
     * The `Target` field will already contain the path to the script. You need to add a command in front of it. Click at `Target` field and paste the following text:
     
-      `C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -NoProfile -File "C:\Users\YOUR_USER_NAME\...\ARN-DL\Data_Inside\Test.ps1"`
+      `C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -NoProfile -File "C:\Users\YOUR_USER_NAME\...\ARN-DL\Data_Inside\ARN-DL.ps1"`
     
       * Important: After pasting, you must verify that the file path inside the quotes ("...") correctly points to your ARN-DL.ps1 file.
 
@@ -167,9 +167,9 @@ The FFmpeg binaries included in this project are builds from gyan.dev and are li
 * **License:** LGPL v3.0
 * **License Copy:** The full text of the license is available in the `LICENSE_FFMPEG.txt` file in this repository.
 
-### Assets & Music
+**Music**
 
-**Download Music:** TempleOS Hymn Risen (Remix)
+**Cloud Connection Theme:** TempleOS Hymn Risen (Remix)
 * **Artist:** Dave Eddy
 * **Artist Website:** [daveeddy.com](https://daveeddy.com)
 * **Related Project:** [ysap.sh](https://ysap.sh)
