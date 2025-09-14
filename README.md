@@ -45,6 +45,36 @@ For the best results, especially with websites that use anti-bot protections, it
 
 This step allows ARN-DL to download age-restricted content, private videos (from your account), and bypass most "prove you are human" checks.
 
+## TROUBLESHOOTING: MANUAL SHORTCUT CREATION -
+
+If the "Setup.exe" fails or the desktop shortcut doesn't work, follow these steps to create a functional shortcut manually.
+
+1.  **Navigate to the Script Folder**:
+    Open the main application folder and go into the `Data_Inside` directory.
+
+2.  **Create a Shortcut to Desktop**:
+    * Locate the `ARN-DL.ps1` file.
+    * Right-click on the `ARN-DL.ps1` file.
+    * Note for Windows 11 users: You may need to click "Show more options" to see the full context menu.
+    * Go to "Send to" and then select "Desktop (create shortcut)".
+
+3.  **Configure the Shortcut Properties**:
+    * Go to your desktop, find the new shortcut, right-click on it, and choose "Properties".
+    * In the "Shortcut" tab, locate the "Target" field.
+    * The `Target` field will already contain the path to the script. You need to add a command in front of it. Click at `Target` field and paste the following text:
+    
+      `C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -NoProfile -File "C:\Users\YOUR_USER_NAME\...\ARN-DL\Data_Inside\Test.ps1"`
+    
+      * Important: After pasting, you must verify that the file path inside the quotes ("...") correctly points to your ARN-DL.ps1 file.
+
+4.  **Set Administrator Privileges**:
+    * While still in the "Properties" window, click the "Advanced..." button.
+    * Check the box for "Run as administrator" and click "OK".
+
+5.  **Apply and Finish**:
+    * Click "Apply" and then "OK" to save the changes.
+    * You can now rename the shortcut to "ARN-DL" for clarity. Double-clicking this new shortcut will launch the application with the correct settings.
+
 ## User Guide: The Download Flow
 
 The script guides you through a series of menus to configure your download precisely.

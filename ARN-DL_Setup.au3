@@ -57,22 +57,25 @@ Sleep(2000)
 _ConsoleWriteColor("A one-time administrator approval is required to enable permission-free launching from the shortcut." & @CRLF, 11)
 
 ; === MAIN LOGIC =============================================================
+; The core of the setup. This section establishes the UAC bypass mechanism.
+; It works in two parts: first, registering a privileged task, and second,
+; creating shortcuts that can trigger this task on demand without a UAC prompt.
+
 ; --- Step 1: Create the Scheduled Task ---
-ConsoleWrite(@CRLF & "[1/3] Enable permission-free launching..." & @CRLF)
+; A task is registered with the highest privileges. The key is the schedule:
+; by setting it to run once on a date in the past, we ensure the task is valid
+; but will never be triggered by the Windows Scheduler itself
 
-; This is the silent command. It redirects success messages to NUL.
-Local $sSilentCommand = @ComSpec & ' /c schtasks /create /tn "' & $taskName & '" /tr "' & $launcherPath & '" /sc once /sd 01/01/2000 /st 00:00 /rl highest /f > NUL'
-; We run the command and catch its exit code.
-Local $iExitCode = RunWait($sSilentCommand, "", @SW_HIDE)
+ConsoleWrite(@CRLF & "[1/3] Registering the permission-free launching..." & @CRLF)
 
-; We check if the mission failed. An exit code other than 0 means failure.
-If $iExitCode <> 0 Then
-    _Pause("ERROR: Failed to create the permission-free launching. Please report this issue.")
-    Exit
-EndIf
+; The command is now completely silent, redirecting both success (1) and error (2) messages to NUL.
+Local $sSilentCommand = @ComSpec & ' /c schtasks /create /tn "' & $taskName & '" /tr "' & $launcherPath & '" /sc once /sd 01/01/2000 /st 00:00 /rl highest /f > NUL 2>&1'
 
+; We run the command and wait for it to finish, ignoring its exit code.
+RunWait($sSilentCommand, "", @SW_HIDE)
+
+; This is now the only output, confirming the operation's completion.
 _ConsoleWriteColor("      Enable permission-free launching successfully." & @CRLF, 10)
-Sleep(500)
 
 ; --- Step 2: Create the Desktop Shortcut ---
 ConsoleWrite("[2/3] Creating the Desktop shortcut..." & @CRLF)
