@@ -61,7 +61,7 @@ _ConsoleWriteColor("A one-time administrator approval is required to enable perm
 ConsoleWrite(@CRLF & "[1/3] Enable permission-free launching..." & @CRLF)
 
 ; This is the silent command. It redirects success messages to NUL.
-Local $sSilentCommand = @ComSpec & ' /c schtasks /create /tn "' & $taskName & '" /tr "' & $launcherPath & '" /sc onlogon /rl highest /f > NUL'
+Local $sSilentCommand = @ComSpec & ' /c schtasks /create /tn "' & $taskName & '" /tr "' & $launcherPath & '" /sc once /sd 01/01/2000 /st 00:00 /rl highest /f > NUL'
 ; We run the command and catch its exit code.
 Local $iExitCode = RunWait($sSilentCommand, "", @SW_HIDE)
 
