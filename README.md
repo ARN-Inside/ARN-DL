@@ -21,7 +21,10 @@ Our straightforward process is powered by a robust backend designed for maximum 
 
 ## Getting Started
 
-Follow these steps to get ARN-DL installed and configured.
+ARN-DL is designed as a portable, self-contained application. The goal is to provide a tool that works out-of-the-box with zero setup, ensuring both ease of use and long-term stability.
+
+* **Instant Usability**: There is no need to manually install dependencies like `yt-dlp` or `FFmpeg`. Everything is included, allowing you to use the application immediately after downloading.
+* **Guaranteed Stability**: By packaging all dependencies directly, we ensure that ARN-DL always runs with a specific, tested set of components. This prevents unexpected bugs or compatibility issues from external updates, guaranteeing a consistent and reliable experience.
 
 ### 1. Run the Setup Utility
 
