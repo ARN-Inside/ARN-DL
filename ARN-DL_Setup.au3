@@ -20,6 +20,59 @@ Opt("WinTitleMatchMode", 2)
 ; This command ensures maximum character compatibility for the console.
 DllCall("kernel32.dll", "bool", "SetConsoleOutputCP", "uint", 65001)
 
+
+
+; #################################################################################################
+; ### SCRIPT PATH VALIDATION BLOCK                                                              ###
+; #################################################################################################
+; Purpose:      To ensure the script's execution path is valid before proceeding.
+; Problem:      Parentheses '()' in the script's path cause critical failures.
+;               When creating a shortcut, Windows mishandles the path for the
+;               "Start In" field, often adding extra quotes ("") which breaks the shortcut.
+; Solution:     This block detects if the current script path contains these invalid characters.
+;               If found, it displays a error message to the user, preventing further issues.
+; #################################################################################################
+
+If @Compiled Then
+    ; Check if the script's parent directory path contains either '(' or ')'.
+    If StringInStr(@ScriptDir, "(") Or StringInStr(@ScriptDir, ")") Then
+
+        ; --- Display Formatted Error Message ---
+        ConsoleWrite("====================================================================================" & @CRLF)
+        _ConsoleWriteColor("      ERROR: INVALID APPLICATION PATH DETECTED", 12) ; 12 = Red
+        ConsoleWrite("====================================================================================" & @CRLF & @CRLF)
+
+        _ConsoleWriteColor("The application cannot run from a file path that contains parentheses '()'.", 11) ; 11 = Light Blue
+        _ConsoleWriteColor("Please rename the folder to remove these characters.", 11)
+        ConsoleWrite(@CRLF)
+
+        ; Provide a specific example using the user's current path.
+        Local $sInvalidPath = @ScriptDir & "\" & @ScriptName
+        Local $sCorrectedPathExample = StringReplace(StringReplace($sInvalidPath, "(", ""), ")", "")
+
+        _ConsoleWriteColor("-----------------------------[ EXAMPLE ]------------------------------", 14) ; 14 = Yellow
+        ConsoleWrite("   INCORRECT PATH:" & @CRLF)
+        _ConsoleWriteColor("   " & $sInvalidPath, 12) ; 12 = Red
+        ConsoleWrite(@CRLF)
+        ConsoleWrite("   CORRECTED PATH:" & @CRLF)
+        _ConsoleWriteColor("   " & $sCorrectedPathExample, 10) ; 10 = Green
+        _ConsoleWriteColor("--------------------------------------------------------------------", 14)
+
+        ConsoleWrite(@CRLF & @CRLF)
+        _ConsoleWriteColor("We apologize for the inconvenience.", 11)
+        _ConsoleWriteColor("Please restart the application after renaming the folder.", 11)
+        ConsoleWrite(@CRLF)
+
+        ; Halt execution until the user acknowledges the message.
+        _Pause("Press any key to exit.")
+        Exit
+    EndIf
+EndIf
+; #################################################################################################
+; ### END OF VALIDATION BLOCK                                                                   ###
+; #################################################################################################
+
+
 ; === CONFIGURATION ==========================================================
 ; Defines the name of the .lnk file that will be created.
 Global $shortcutName = "ARN-DL.lnk"
