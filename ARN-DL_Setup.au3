@@ -38,13 +38,13 @@ Global $localPath = @ScriptDir
 ; Path to the setup's intro audio file.
 Global $audioPath = @ScriptDir & "\Data_Inside\Core_audio_components\ARN_Inside.wav"
 
-; === VISUAL & AUDIO INTRO ===================================================
+; ============ AUDIO INTRO ===================================================
 ; The sound file provides an immersive ambiance for the setup process.
 If FileExists($audioPath) Then
     SoundPlay($audioPath)
 EndIf
 
-; A clean, straightforward title is displayed. No logos.
+; Title is displayed.
 ConsoleWrite("====================================================================================" & @CRLF)
 _ConsoleWriteColor("                            Welcome to the ARN-DL Setup" & @CRLF, 10)
 ConsoleWrite("====================================================================================" & @CRLF & @CRLF)
@@ -68,7 +68,9 @@ _ConsoleWriteColor("A one-time administrator approval is required to enable perm
 
 ConsoleWrite(@CRLF & "[1/3] Registering the permission-free launching..." & @CRLF)
 
-; The command is now completely silent, redirecting both success (1) and error (2) messages to NUL.
+; To prevent the expected "WARNING: The task may not run because the start date is in the past."
+; message from being displayed, the command is made completely silent by redirecting
+; both success (1) and error (2) output streams to NUL.
 Local $sSilentCommand = @ComSpec & ' /c schtasks /create /tn "' & $taskName & '" /tr "' & $launcherPath & '" /sc once /sd 01/01/2000 /st 00:00 /rl highest /f > NUL 2>&1'
 
 ; We run the command and wait for it to finish, ignoring its exit code.
@@ -80,15 +82,24 @@ _ConsoleWriteColor("      Enable permission-free launching successfully." & @CRL
 ; --- Step 2: Create the Desktop Shortcut ---
 ConsoleWrite("[2/3] Creating the Desktop shortcut..." & @CRLF)
 FileCreateShortcut(@SystemDir & "\schtasks.exe", $desktopPath & "\" & $shortcutName, $workingDir, '/run /tn "' & $taskName & '"', "Launcher for ARN-DL", $iconPath)
-_ConsoleWriteColor("      Desktop shortcut created." & @CRLF, 10)
+; We check for an error immediately after creation.
+If Not @error Then
+    _ConsoleWriteColor("      Desktop shortcut created." & @CRLF, 10)
+Else
+    ; Failure: We display a warning message.
+    _ConsoleWriteColor("      Warning: Could not create Desktop shortcut." & @CRLF, 12)
+EndIf
 Sleep(500)
 
 ; --- Step 3: Create the Local Shortcut ---
 ConsoleWrite("[3/3] Creating a local shortcut in the current folder..." & @CRLF)
 FileCreateShortcut(@SystemDir & "\schtasks.exe", $localPath & "\" & $shortcutName, $workingDir, '/run /tn "' & $taskName & '"', "Launcher for ARN-DL", $iconPath)
+
+; We check for an error immediately after creation.
 If Not @error Then
     _ConsoleWriteColor("      Local shortcut created." & @CRLF, 10)
 Else
+    ; Failure: We display a warning message.
     _ConsoleWriteColor("      Warning: Could not create local shortcut." & @CRLF, 12)
 EndIf
 Sleep(1000)
@@ -136,7 +147,7 @@ Func _Pause($sMessage)
     WEnd
 EndFunc
 
-; SYNOPSIS: Repeats a given string a specified number of times.
+; SYNOPSIS: Repeats a given string a specified number of times. Used for text centering.
 Func _StringRepeat($sString, $iCount)
     Local $sResult = ""
     For $i = 1 To $iCount
