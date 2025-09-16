@@ -1,0 +1,3 @@
+# Python dependencies for the external tool yt-dlp,
+# listed for GitHub's dependency graph scanning.
+yt-dlp
