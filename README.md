@@ -1,6 +1,6 @@
 # ARN-DL
 
-The ultimate GUI for high-quality media downloads, powered by an intelligent engine with multi-stage fallbacks, client emulation, and a fully integrated updater.
+ARN-DL: The user-friendly TUI to reliably download any video/audio. 🔽 Powered by yt-dlp & FFmpeg with smart fallbacks & emulation.
 
 Our straightforward process is powered by a robust backend designed for maximum resilience and quality, wrapped in a unique, retro-inspired terminal interface with a custom audio ambiance.
 
