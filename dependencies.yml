@@ -4,8 +4,7 @@ name: Dependency Declaration
 
 on:
   push:
-    branches: [ "main" ] # Vous pouvez changer "main" si votre branche principale a un autre nom
-
+    branches: [ "main" ]
 jobs:
   declare_dependencies:
     runs-on: ubuntu-latest
