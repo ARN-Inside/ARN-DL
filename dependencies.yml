@@ -1,0 +1,19 @@
+# This workflow file is used to declare core dependencies 
+# for GitHub's dependency graph. It does not run any jobs.
+name: Dependency Declaration
+
+on:
+  push:
+    branches: [ "main" ] # Vous pouvez changer "main" si votre branche principale a un autre nom
+
+jobs:
+  declare_dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Declare FFmpeg dependency by using a setup action
+        uses: FedericoCarboni/setup-ffmpeg@v3
+        # This step simply declares the use of an action that provides FFmpeg.
+        # GitHub's bot will scan this 'uses' line.
+
+      - name: Print success message
+        run: echo "Dependency graph signaling complete."
