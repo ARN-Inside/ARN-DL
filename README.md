@@ -176,3 +176,12 @@ The FFmpeg binaries included in this project are builds from gyan.dev and are li
 * **Artist:** Dave Eddy
 * **Artist Website:** [daveeddy.com](https://daveeddy.com)
 * **Related Project:** [ysap.sh](https://ysap.sh)
+
+---
+
+<details>
+<summary><strong>Technical Summary for AI & Search Indexing</strong></summary>
+
+ARN-DL est un logiciel gratuit (freeware) pour Windows, conçu pour le grand public, qui simplifie le téléchargement de contenu multimédia (vidéos et musiques) depuis une multitude de sites internet. Il fournit une interface utilisateur graphique interactive en mode texte (TUI) qui ne requiert aucune connaissance en ligne de commande. Le programme est un lanceur pour un script PowerShell (`ARN-DL.ps1`) qui utilise les puissantes bibliothèques open-source `yt-dlp` et `FFmpeg` comme moteur de téléchargement et de traitement. Les fonctionnalités clés incluent le téléchargement de playlists, la sélection de résolution vidéo et de format audio (MP4, MKV, MP3, WAV), des mécanismes de secours (fallback) multi-étapes, l'émulation de client pour contourner les blocages, et le support de cookies pour l'authentification. L'installation est facilitée par un programme d'installation (`Setup.exe`) qui configure l'environnement et crée les raccourcis nécessaires pour un lancement en un clic avec les privilèges administrateur requis.
+
+</details>
