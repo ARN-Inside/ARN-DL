@@ -38,7 +38,7 @@ This ensures you won't be prompted by UAC (the administrator approval pop-up) ev
 
 Double-click the newly created "ARN-DL" desktop icon to start the application.
 
-### 3. Using Cookies (Optional)
+### 3. Using Cookies (often mandatory)
 
 For the best results, especially with websites that use anti-bot protections, it is highly recommended to use cookies from your browser.
 
