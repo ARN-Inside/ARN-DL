@@ -2059,8 +2059,8 @@ if (!(Test-Path -LiteralPath $script:CookiesFile)) {
 # Netscape HTTP Cookie File
 # Do not delete the first line (# Netscape HTTP Cookie File) it is required for yt-dlp to recognize the file.
 #
-# --- Using Cookies (Optional) ---
-# This file allows yt-dlp to use cookies from your browser. This is OPTIONAL, but it helps make downloads more reliable by bypassing anti-bot checks.
+# --- Using Cookies (often mandatory) ---
+# This file allows yt-dlp to use cookies from your browser, it helps make downloads more reliable by bypassing anti-bot checks.
 # It's also required for specific cases (e.g., logging in for private content, passing age-gates, accepting cookie banners).
 #
 # --- A Note on Account Safety ---
@@ -2077,6 +2077,10 @@ if (!(Test-Path -LiteralPath $script:CookiesFile)) {
 # 4. Paste the entire content of the exported file below this header.
 # 5. Close the private browser window to ensure the session is terminated.
 #
+# If you downloaded without filling in the cookies.txt it often doesn't work, it will automatically be populated with generic visitor cookies:
+#   - Delete the cookies.txt file from the 'data_Inside' folder.
+#   - Restart the script and select 'Manage cookies' to open cookies.txt and past cookies from your Web browser
+#
 # ---  Example of the first few lines (for illustration only, do not use these) ---
 # .youtube.com	TRUE	/	TRUE	1765968483	__Secure-3PSIDTS	sidts-P856YB5TD3P_cmFn23qKz-b42y_AlgokW1kjkk:KARN/q0618JZ4xAA
 # .youtube.com	TRUE	/	TRUE	8442531321	__Secure-ROLLOUT_TOKEN	Cjfyf;fOE-u:ARN!RNA#ARN.JGgfszJKjjly-Jyfz%kj
@@ -2084,8 +2088,6 @@ if (!(Test-Path -LiteralPath $script:CookiesFile)) {
 # ------------------------------------------------------------------
 # PASTE YOUR COOKIES BELOW THIS LINE
 # ------------------------------------------------------------------
-
-
 '@
     [System.IO.File]::WriteAllText($script:CookiesFile, $CookieHeaderText, $Utf8WithoutBom)
 }
