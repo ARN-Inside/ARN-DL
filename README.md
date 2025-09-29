@@ -40,13 +40,17 @@ Double-click the newly created "ARN-DL" desktop icon to start the application.
 
 ### 3. Using Cookies (often mandatory)
 
+This step allows ARN-DL to download age-restricted content, private videos (from your account), and bypass most "prove you are human" checks.
 For the best results, especially with websites that use anti-bot protections, it is highly recommended to use cookies from your browser.
 
 1.  When you first run the script, a `cookies.txt` file is created in the same folder.
 2.  Open this file in a text editor and follow the instructions inside to export your browser cookies using a recommended extension like **Get cookies.txt LOCALLY**.
 3.  Paste the exported text into the `cookies.txt` file and save it.
 
-This step allows ARN-DL to download age-restricted content, private videos (from your account), and bypass most "prove you are human" checks.
+**If you downloaded without filling in the `cookies.txt`**: 
+It often doesn't work and will automatically be populated with generic visitor cookies:
+    - Delete the cookies.txt file from the `data_Inside` folder.
+    - Restart the script and select 'Manage cookies' to open `cookies.txt` and past cookies from your Web browser.
 
 ## TROUBLESHOOTING: MANUAL SHORTCUT CREATION -
 
