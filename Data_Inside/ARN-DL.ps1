@@ -45,7 +45,7 @@ $script:ReencodeAudioBitrate = '320k'
 # END OF DEFAULT CONFIGURATION SETTINGS
 #==============================================================================
 
-$script:Version = "1.0.0"
+$script:Version = "1.1.0"
 
 $script:integrityFailureReported = $false
 
@@ -61,6 +61,21 @@ Set-Alias -Name Ensure-VibeCompliance -Value Invoke-ARNIntegrityCheck -Scope Scr
 
 $scriptFolder = (Get-Item -Path $MyInvocation.MyCommand.Path).Directory.FullName
 $documentsPath = [Environment]::GetFolderPath('MyDocuments')
+$ytDlpExe = Join-Path $scriptFolder "yt-dlp.exe"
+$ffprobeExe = Join-Path $scriptFolder "ffprobe.exe"
+$ffmpegExe = Join-Path $scriptFolder "ffmpeg.exe"
+$parentFolder = (Get-Item $scriptFolder).Parent.FullName 
+$downloadRootFolder = Join-Path $parentFolder "Downloads"
+
+
+New-Item -Path $downloadRootFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+$env:PATH = "$scriptFolder;" + $env:PATH
+
+if (-not (Get-Command yt-dlp.exe -ErrorAction SilentlyContinue)) { Write-Centered "FATAL ERROR: yt-dlp.exe could not be found." "Red"; Read-Host "Press Enter to exit."; exit }
+if (-not (Get-Command ffmpeg.exe -ErrorAction SilentlyContinue)) { Write-Centered "FATAL ERROR: ffmpeg.exe could not be found." "Red"; Read-Host "Press Enter to exit."; exit }
+if (-not (Get-Command ffprobe.exe -ErrorAction SilentlyContinue)) { Write-Centered "FATAL ERROR: ffprobe.exe could not be found." "Red"; Read-Host "Press Enter to exit."; exit }
+
+
 
 # --- Log File Initialization ---
 # If logging is enabled, create a unique, timestamped log file path for the script run.
@@ -160,38 +175,46 @@ $script:MenuAudioPath     = $null
 $script:DownloadAudioPath = $null
 $script:CurrentAudioMode  = 'Menu'
 
+function Initialize-AudioPlusDoubleWav {
 <#
 .SYNOPSIS
     Locates and initializes core audio components from multiple possible locations.
 .DESCRIPTION
     This function robustly searches for the essential .wav files in a prioritized list
-    of directories. It then performs a mandatory asset validation check before proceeding.
+    of directories. It prioritizes the local 'Data_Inside' folder first, then checks
+    the main 'Downloads' folder, and finally the user's 'Documents' folder as a last resort.
+    It performs a mandatory asset validation check before proceeding.
 #>
-function Initialize-AudioPlusDoubleWav {
     try {
+        # --- CORRECTED SEARCH ORDER ---
+        # 1. Prioritize local paths relative to the script for maximum portability.
+        # 2. Check the global Downloads folder.
+        # 3. Fall back to a shared location in the user's Documents folder as a last resort.
+
         # Resolve candidate paths for menu music (ARN_Inside.wav)
         $menuCandidates = @(
-            (Join-Path $documentsPath "ARN-DL\Data_Inside\Core_audio_components\ARN_Inside.wav"),
-            (Join-Path $scriptFolder    "Data_Inside\Core_audio_components\ARN_Inside.wav"),
-            (Join-Path $scriptFolder    "Core_audio_components\ARN_Inside.wav"),
-            (Join-Path $parentFolder    "Data_Inside\Core_audio_components\ARN_Inside.wav"),
-            (Join-Path $scriptFolder    "ARN_Inside.wav")
+            (Join-Path $scriptFolder  "Data_Inside\Core_audio_components\ARN_Inside.wav"),
+            (Join-Path $scriptFolder  "Core_audio_components\ARN_Inside.wav"),
+            (Join-Path $parentFolder  "Data_Inside\Core_audio_components\ARN_Inside.wav"),
+            (Join-Path $scriptFolder  "ARN_Inside.wav"),
+            (Join-Path $downloadRootFolder "ARN-DL\Data_Inside\Core_audio_components\ARN_Inside.wav"),
+            (Join-Path $documentsPath "ARN-DL\Data_Inside\Core_audio_components\ARN_Inside.wav")
         ) | Where-Object { Test-Path -LiteralPath $_ }
         if ($menuCandidates -and $menuCandidates[0]) { $script:MenuAudioPath = $menuCandidates[0] }
 
         # Resolve candidate paths for download music
         $dlCandidates = @(
-            (Join-Path $documentsPath "ARN-DL\Data_Inside\Core_audio_components\Dave Eddy - TempleOS Hymn Risen (Remix).wav"),
-            (Join-Path $scriptFolder    "Data_Inside\Core_audio_components\Dave Eddy - TempleOS Hymn Risen (Remix).wav"),
-            (Join-Path $scriptFolder    "Core_audio_components\Dave Eddy - TempleOS Hymn Risen (Remix).wav"),
-            (Join-Path $parentFolder    "Data_Inside\Core_audio_components\Dave Eddy - TempleOS Hymn Risen (Remix).wav"),
-            (Join-Path $scriptFolder    "Dave Eddy - TempleOS Hymn Risen (Remix).wav")
+            (Join-Path $scriptFolder  "Data_Inside\Core_audio_components\Dave Eddy - TempleOS Hymn Risen (Remix).wav"),
+            (Join-Path $scriptFolder  "Core_audio_components\Dave Eddy - TempleOS Hymn Risen (Remix).wav"),
+            (Join-Path $parentFolder  "Data_Inside\Core_audio_components\Dave Eddy - TempleOS Hymn Risen (Remix).wav"),
+            (Join-Path $scriptFolder  "Dave Eddy - TempleOS Hymn Risen (Remix).wav"),
+            (Join-Path $downloadRootFolder "ARN-DL\Data_Inside\Core_audio_components\Dave Eddy - TempleOS Hymn Risen (Remix).wav"),
+            (Join-Path $documentsPath "ARN-DL\Data_Inside\Core_audio_components\Dave Eddy - TempleOS Hymn Risen (Remix).wav")
         ) | Where-Object { Test-Path -LiteralPath $_ }
         if ($dlCandidates -and $dlCandidates[0]) { $script:DownloadAudioPath = $dlCandidates[0] }
     } catch {}
     Assert-MandatoryFun
 }
-
 function Set-AudioMode {
     param([ValidateSet('Menu','Download')][string]$Mode,[string]$Path)
     $prevDesired = $script:audioDesiredPath
@@ -763,6 +786,8 @@ function Invoke-ExternalAnimated {
         [int]$PollMs = 80
     )
 
+    $tempCookieFile = $null
+
     # All core functionalities are guided by a divine plan.
     if (-not (Invoke-GodsDivineAudioPlan -Silent)) { 
         return [PSCustomObject]@{ ExitCode = -999; Error = "Divine plan integrity check failed"; StdOut=@(); StdErr=@("Divine plan integrity check failed") }
@@ -770,7 +795,19 @@ function Invoke-ExternalAnimated {
 
 
     $argsAll = @()
-    if ($FilePath -eq $ytDlpExe) { $argsAll += $script:YtDlpCommonSwitches; $argsAll += (Get-CookiesArgs) }
+    if ($FilePath -eq $ytDlpExe) {
+            $argsAll += $script:YtDlpCommonSwitches
+        
+            try {
+                if ((Test-Path -LiteralPath $script:CookiesFile) -and ((Get-Item $script:CookiesFile).Length -gt 32)) {
+                    $tempCookieFile = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), [System.IO.Path]::GetRandomFileName())
+                    Copy-Item -LiteralPath $script:CookiesFile -Destination $tempCookieFile -Force
+                    $argsAll += @('--cookies', $tempCookieFile)
+                }
+            } catch {
+                Write-Warning "Could not create/use temporary cookie file: $($_.Exception.Message)"
+            }
+        }
     if ($Arguments) { $argsAll += $Arguments }
     $argString = ($argsAll | ForEach-Object { Quote-Arg $_ }) -join ' '
     
@@ -812,6 +849,9 @@ function Invoke-ExternalAnimated {
             try { Remove-Item -LiteralPath $tempErr -ErrorAction SilentlyContinue } catch {}
         }
     }
+        if ($null -ne $tempCookieFile -and (Test-Path -LiteralPath $tempCookieFile)) {
+            try { Remove-Item -LiteralPath $tempCookieFile -Force -ErrorAction SilentlyContinue } catch {}
+        }
 }
 
 
@@ -982,47 +1022,83 @@ function Invoke-YTDLPVideoAttempt {
 }
 
 function Invoke-YTDLPAudioAttempt {
+    #
+    #   .SYNOPSIS
+    #       Executes a single, robust attempt to download and process an audio stream using yt-dlp.
+    #
+    #   .DESCRIPTION
+    #       This function constructs and runs a yt-dlp command tailored for audio acquisition. It uses an
+    #       intelligent sorting mechanism to select the best possible audio source and then leverages FFmpeg
+    #       (via yt-dlp) to extract and convert it into the desired final format (WAV or high-quality MP3).
+    #
+    #   .PARAMETER Fmt
+    #       The base format selector for yt-dlp (e.g., 'bestaudio'), which defines the initial pool of streams to consider.
+    #
+    #   .PARAMETER OutFile
+    #       The full destination path for the final output audio file (.wav or .mp3).
+    #
+    #   .PARAMETER Url
+    #       The URL of the media to be processed.
+    #
+    #   .PARAMETER Client
+    #       Optional. The YouTube player client to emulate for the request, enhancing resilience.
+    #
+    #   .PARAMETER AudioFormat
+    #       The desired final audio format ('wav' or 'mp3').
+    #
     param(
         [Parameter(Mandatory=$true)]
         [string]$Fmt,
 
         [Parameter(Mandatory=$true)]
-        # The full path for the output audio file (.wav or .mp3)
         [string]$OutFile,
 
         [Parameter(Mandatory=$true)]
         [string]$Url,
 
         [string]$Client = $null,
-
-        # The desired audio format ('wav' or 'mp3')
+        
         [string]$AudioFormat = 'wav'
     )
+
     $args = @()
-    if ($Client) { $args += @('-N','3', '--extractor-args', "youtube:player_client=$Client") }
+
+    # Add client emulation arguments if a specific client is provided.
+    if ($Client) {
+        $args += @('-N','3', '--extractor-args', "youtube:player_client=$Client")
+    }
     
-    # Build the base arguments for yt-dlp
+    # Build the core arguments for yt-dlp's format selection.
     $args += @(
+        # Specifies the initial pool of formats to consider (e.g., 'bestaudio' for audio-only streams).
         '-f', $Fmt,
-        # Optimized audio sorting, prioritizing bitrate and sample rate.
-        '-S', 'abr,asr,acodec,ext',
+        
+        # Applies a sophisticated sorting key to the format pool.
+        # This key, generated by Get-AudioFormatExpression, defines the preference for codecs (Opus > AAC)
+        # and quality metrics (bitrate, sample rate), ensuring the best possible audio source is selected.
+        '-S', (Get-AudioFormatExpression),
+
+        # Instructs yt-dlp to continue downloading even if some fragments are unavailable.
         '--skip-unavailable-fragments'
     )
 
-    # Add format-specific arguments based on the user's choice
+    # Add post-processing arguments to extract and convert the audio to the desired final format.
     if ($AudioFormat -eq 'wav') {
+        # Extracts audio and converts it to WAV format.
         $args += @('-x','--audio-format','wav')
     } else { # Assuming mp3
-        # For MP3, use --audio-quality 0 (best VBR for the LAME codec) instead of a fixed bitrate.
+        # Extracts audio and converts it to a high-quality VBR MP3 using the LAME encoder's best setting.
         $args += @('-x','--audio-format','mp3', '--audio-quality', '0')
     }
 
-    # Add the remaining arguments (output path, URL, and retry logic)
+    # Add the remaining arguments for output path and network resilience.
     $args += @(
         '-o', $OutFile,
         $Url,
         '--retries','3','--fragment-retries','3','--sleep-interval','1','--max-sleep-interval','5'
     )
+
+    # Execute the command and return a boolean indicating success.
     [void](Invoke-ExternalAnimated -FilePath $ytDlpExe -Arguments $args)
     return (Test-Path -LiteralPath $OutFile)
 }
@@ -1057,9 +1133,14 @@ function Ensure-WavFormat {
 
 
 function Get-AudioFormatExpression {
-    # Returns the most robust audio format selection cascade for yt-dlp.
-    return 'bestaudio[acodec*=opus]/bestaudio[ext=m4a]/bestaudio'
+    # Returns the ultimate audio SORTING cascade for yt-dlp.
+    # This key implements a hybrid "Technology first, guaranteed by Bitrate" approach.
+    # 1. +codec:opus,abr: Tries to find the best Opus track, sorted by bitrate.
+    # 2. +ext:m4a,abr: If no Opus is found, it falls back to the best AAC track, sorted by bitrate.
+    # 3. abr: As a final fallback, it sorts any remaining format by bitrate.
+    return 'hasaud,+codec:opus,abr,+ext:m4a,abr,quality'
 }
+
 
 function Reencode-MKV-To-MP4 {
     param(
@@ -1481,10 +1562,18 @@ function Invoke-IntelligentAnalysis {
     )
     $arguments = @('-J', $Url)
     $filePath = (Get-Item -Path $script:ytDlpExe).FullName
-
+    $tempCookieFile = $null
     $argsAll = @()
     $argsAll += $script:YtDlpCommonSwitches
-    $argsAll += (Get-CookiesArgs)
+    try {
+        if ((Test-Path -LiteralPath $script:CookiesFile) -and ((Get-Item $script:CookiesFile).Length -gt 32)) {
+            $tempCookieFile = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), [System.IO.Path]::GetRandomFileName())
+            Copy-Item -LiteralPath $script:CookiesFile -Destination $tempCookieFile -Force
+            $argsAll += @('--cookies', $tempCookieFile)
+        }
+    } catch {
+        Write-Warning "Could not create/use temporary cookie file for analysis: $($_.Exception.Message)"
+    }
     $argsAll += $arguments
     $argString = ($argsAll | ForEach-Object { Quote-Arg $_ }) -join ' '
     
@@ -1547,6 +1636,9 @@ $stdOut
     finally {
         if ($process) { $process.Dispose() }
     }
+        if ($null -ne $tempCookieFile -and (Test-Path -LiteralPath $tempCookieFile)) {
+            try { Remove-Item -LiteralPath $tempCookieFile -Force -ErrorAction SilentlyContinue } catch {}
+        }
 }
 
 function Find-BestFormats {
@@ -1654,7 +1746,6 @@ PART 2: FIND-BESTFORMATS (DECISION LOGIC)
     # If everything failed, return null
     return $null
 }
-
 
 function Build-VideoDownloadCascade {
     param(
@@ -2092,16 +2183,6 @@ if (!(Test-Path -LiteralPath $script:CookiesFile)) {
     [System.IO.File]::WriteAllText($script:CookiesFile, $CookieHeaderText, $Utf8WithoutBom)
 }
 
-function Get-CookiesArgs {
-    try { if ((Test-Path -LiteralPath $script:CookiesFile) -and ((Get-Item $script:CookiesFile).Length -gt 32)) { return @('--cookies', $script:CookiesFile) } } catch {}
-    return @()
-}
-
-$ytDlpExe = Join-Path $scriptFolder "yt-dlp.exe"; $ffprobeExe = Join-Path $scriptFolder "ffprobe.exe"; $ffmpegExe = Join-Path $scriptFolder "ffmpeg.exe"
-$parentFolder = (Get-Item $scriptFolder).Parent.FullName; $downloadRootFolder = Join-Path $parentFolder "Downloads"
-New-Item -Path $downloadRootFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
-$env:PATH = "$scriptFolder;" + $env:PATH
-if (-not (Get-Command ffmpeg.exe -ErrorAction SilentlyContinue)) { Write-Centered "FATAL ERROR: ffmpeg.exe could not be found." "Red"; Read-Host "Press Enter to exit."; exit }
 
 # Anti-wrap: buffer width
 try { $raw=$Host.UI.RawUI; $desiredWidth=200; if ($raw.BufferSize.Width -lt $desiredWidth){ $buf=$raw.BufferSize; $buf.Width=$desiredWidth; $raw.BufferSize=$buf } } catch {}
@@ -2343,20 +2424,20 @@ function Download-Flow {
                 }
             }
 
+
             # ================== AUDIO (.WAV or .MP3) ==================
             if ($formatChoice -in @('audio', 'video_plus_audio')) {
-                # Determine the target audio format and file path from the quality menu's choice
+                # Determine the target audio format and file path from the quality menu's choice.
                 $audioFormat = $qualityObject.AudioQualityTag
                 $finalAudioFile = if ($audioFormat -eq 'wav') { 
-                                      Join-Path $destFolder "$titleSan.wav" 
-                                  } else { 
-                                      Join-Path $destFolder "$titleSan.mp3" 
-                                  }
+                    Join-Path $destFolder "$titleSan.wav" 
+                } else { 
+                    Join-Path $destFolder "$titleSan.mp3" 
+                }
 
-                # If the audio file already exists, skip
+                # If the audio file already exists, skip processing.
                 if (Test-Path -LiteralPath $finalAudioFile) {
                     $reportMsg = if ($audioFormat -eq 'wav') { "WAV" } else { "MP3" }
-                    # For video_plus_audio, append to the existing report. For audio only, create a new report entry.
                     if ($formatChoice -eq 'video_plus_audio') {
                         $ex = $downloadReport | Where-Object { $_.T -eq $titleSan };
                         if ($ex) { $ex.D += " +$($reportMsg) already exists." }
@@ -2366,29 +2447,33 @@ function Download-Flow {
                 } else {
                     $audioDownloaded = $false
                     try {
-                        # This part is only for dedicated downloads (not extraction)
                         if ($formatChoice -eq 'audio') { Write-Centered "Initiating audio download for .$($audioFormat) creation..." "Cyan" }
                         
-                        # --- ATTEMPT #1: Main method - Iterate through clients (Optimized for YouTube) ---
+                        # --- ATTEMPT #1: The "Intelligent" approach with smart sorting and client iteration ---
+                        Write-Centered "[Attempt 1/2] Attempting download with smart sort..." "Gray"
                         foreach ($c in (Get-ClientList -Kind 'merge')) {
-                            if (Invoke-YTDLPAudioAttempt -Fmt (Get-AudioFormatExpression) -OutFile $finalAudioFile -Url $video.webpage_url -Client $c -AudioFormat $audioFormat) { $audioDownloaded = $true; break }
+                            if (Invoke-YTDLPAudioAttempt -Fmt 'bestaudio' -OutFile $finalAudioFile -Url $video.webpage_url -Client $c -AudioFormat $audioFormat) {
+                                $audioDownloaded = $true
+                                break
+                            }
                         }
 
-                        # --- FALLBACK #1: High-Quality Opus Codec (will be converted to WAV or MP3) ---
+                        # --- FALLBACK #1: The "Selector-Focused" approach ---
                         if (-not $audioDownloaded) {
-                            Write-Centered "Audio download failed. Attempting high-quality Opus fallback..." "Yellow"
-                            if (Invoke-YTDLPAudioAttempt -Fmt 'bestaudio[acodec*=opus]' -OutFile $finalAudioFile -Url $video.webpage_url -Client $null -AudioFormat $audioFormat) { $audioDownloaded = $true }
+                            Write-Centered "[Attempt 2/2] Smart sort failed. Falling back to selector-focused method..." "Yellow"
+                            $fallbackFmtString = 'bestaudio[acodec*=opus]/bestaudio[ext=m4a]/bestaudio'
+                            # This is a direct, clean call that does NOT use the specialized Invoke-YTDLPAudioAttempt to avoid conflicts.
+                            $tempArgs = @('-f', $fallbackFmtString, '--skip-unavailable-fragments', '-x', '--audio-format', $audioFormat)
+                            if ($audioFormat -eq 'mp3') { $tempArgs += @('--audio-quality', '0') }
+                            $tempArgs += @('-o', $finalAudioFile, $video.webpage_url, '--retries','1','--fragment-retries','1')
+                            [void](Invoke-ExternalAnimated -FilePath $ytDlpExe -Arguments $tempArgs)
+                            if (Test-Path -LiteralPath $finalAudioFile) { $audioDownloaded = $true }
                         }
 
-                        # --- FALLBACK #2: Most compatible audio as a last resort ---
-                        if (-not $audioDownloaded) {
-                            Write-Centered "Opus fallback failed. Attempting most compatible audio fallback..." "DarkYellow"
-                            if (Invoke-YTDLPAudioAttempt -Fmt 'bestaudio' -OutFile $finalAudioFile -Url $video.webpage_url -Client $null -AudioFormat $audioFormat) { $audioDownloaded = $true }
-                        }
 
-                        # --- FINAL CHECK: See if any of the dedicated download attempts succeeded ---
+                        # --- FINAL CHECK AND EXTRACTION FALLBACK LOGIC ---
                         if ($audioDownloaded) {
-                            # SAFETY CHECK: Only run WAV-specific functions on WAV files
+                            # SUCCESS: Post-processing for the successfully downloaded audio file.
                             if ($audioFormat -eq 'wav') {
                                 try { [void](Ensure-WavFormat -WavPath $finalAudioFile) } catch {}
                             }
@@ -2398,12 +2483,11 @@ function Download-Flow {
                             $ex = $downloadReport | Where-Object { $_.T -eq $titleSan };
                             if ($ex) { $ex.D += " $reportMsg" }
                             else { $downloadReport += [PSCustomObject]@{ T=$titleSan; S="Success"; D=($reportMsg.Trim()) } }
-
                         } else {
-                            # --- FALLBACK #3: Based on an already downloaded video (for video_plus_audio mode) ---
+                            # All dedicated download attempts failed. Proceed to the extraction fallbacks.
                             if ($formatChoice -eq 'video_plus_audio') {
-                                Write-Centered "Dedicated audio download failed. Attempting extraction from video file..." "DarkCyan"
-                                
+                                # FALLBACK #3: Extraction from an already downloaded video file.
+                                Write-Centered "Separate audio track not found. Attempting extraction from video file..." "DarkCyan"
                                 $videoFile = $null
                                 if (Test-Path -LiteralPath (Join-Path $destFolder "$titleSan.mp4")) {
                                     $videoFile = Join-Path $destFolder "$titleSan.mp4"
@@ -2431,19 +2515,17 @@ function Download-Flow {
                                     throw "No video file found to extract audio from."
                                 }
                             } else {
-                                # --- ULTIMATE FALLBACK #4: Download a temporary video just to extract its audio (for audio_only mode) ---
-                                Write-Centered "Dedicated audio download failed. Attempting to download a temporary video to extract audio..." "DarkCyan"
+                                # ULTIMATE FALLBACK #4: Download a temporary video just to extract its audio.
+                                Write-Centered "Separate audio track not found. Attempting to download a temporary video for extraction..." "DarkCyan"
                                 $tempVideoFile = Join-Path $destFolder "__temp_video_for_audio_$([Guid]::NewGuid()).tmp"
                                 $videoDownloaded = $false
                                 
                                 try {
-                                    # Attempt to download a standard, compatible video format
                                     if (Invoke-YTDLPVideoAttempt -Fmt 'best[ext=mp4]/best' -Out $tempVideoFile -Url $video.webpage_url -MergeContainer 'mp4') {
                                         $videoDownloaded = $true
                                     }
 
                                     if ($videoDownloaded) {
-                                        # If the temporary video was downloaded, extract audio from it
                                         $ffmpegArgs = @()
                                         if ($audioFormat -eq 'wav') {
                                             $ffmpegArgs = @("-i", $tempVideoFile, "-vn", "-acodec", "pcm_s24le", "-ar", "48000", $finalAudioFile, "-y", "-hide_banner", "-loglevel", "error")
@@ -2463,7 +2545,6 @@ function Download-Flow {
                                         throw "All dedicated audio download attempts failed, and could not download a temporary video."
                                     }
                                 } finally {
-                                    # IMPORTANT: Always clean up the temporary video file
                                     if (Test-Path -LiteralPath $tempVideoFile) {
                                         try { Remove-Item -LiteralPath $tempVideoFile -Force -ErrorAction SilentlyContinue } catch {}
                                     }
@@ -2473,7 +2554,7 @@ function Download-Flow {
                     } catch { 
                         $reportMsg = if ($audioFormat -eq 'wav') { "+WAV" } else { "+MP3" }
                         if ($formatChoice -eq 'audio') {
-                             $downloadReport += [PSCustomObject]@{ T=$titleSan; S="Failure"; D="$($reportMsg.Replace('+','')) download error: $($_.Exception.Message)" }
+                            $downloadReport += [PSCustomObject]@{ T=$titleSan; S="Failure"; D="$($reportMsg.Replace('+','')) download error: $($_.Exception.Message)" }
                         } else {
                             $ex = $downloadReport | Where-Object { $_.T -eq $titleSan };
                             if ($ex) { $ex.S="Failure"; $ex.D += " $($reportMsg) download/extraction error: $($_.Exception.Message)" }
