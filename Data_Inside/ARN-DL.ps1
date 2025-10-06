@@ -2150,29 +2150,23 @@ if (!(Test-Path -LiteralPath $script:CookiesFile)) {
 # Netscape HTTP Cookie File
 # Do not delete the first line (# Netscape HTTP Cookie File) it is required for yt-dlp to recognize the file.
 #
-# --- Using Cookies (often mandatory) ---
-# This file allows yt-dlp to use cookies from your browser, it helps make downloads more reliable by bypassing anti-bot checks.
-# It's also required for specific cases (e.g., logging in for private content, passing age-gates, accepting cookie banners).
+# --- Using Cookies  ---
+# This step is often mandatory to help bypass anti-bot checks, access age-restricted content, and accept cookie banners.
 #
-# --- A Note on Account Safety ---
-# While yt-dlp is widely used, please be aware that automating downloads with a personal account is technically against the Terms of Service of most platforms.
-# Although the risk is generally very low for moderate usage, there is always a small possibility of action being taken against the account (e.g., a temporary warning).
-# For maximum safety, especially if you plan to download large quantities of content, consider using a secondary or "throwaway" account.
+# --- Disclaimer: Please Use Responsibly ---
+# While this tool is designed for convenience, downloading content may infringe on creators' rights or violate platform Terms of Service. 
+# Automating downloads using personal account cookies is a powerful feature that should be used ethically and at your own risk. 
+# Please support creators and respect copyright laws.
 #
 # --- How to Get Your Cookies ---
-# 1. Open a new Private/Incognito browser window.
-# 2. Visit the site you wish to download from. (If the content requires an account, log in before exporting cookies).
-# 3. Use a browser extension to export your cookies in the Netscape format.
-#    A popular and reliable choice is "Get cookies.txt LOCALLY".
-#    -> NOTE: Allow this extension to run in private/incognito in your browser's extension settings.
-# 4. Paste the entire content of the exported file below this header.
-# 5. Close the private browser window to ensure the session is terminated.
+# 1.  Use an extension like **"Get cookies.txt LOCALLY"** to copy your browser's cookies.
+#     * For the most reliable cookies, first open a new **Private/Incognito** browser window.
+#     * Ensure the extension is allowed to run in this mode in your browser's settings.
+#     * Log into the desired website (e.g., YouTube) *before* exporting the cookies.
+# 
+# 2.  **Import into ARN-DL:** In the script's main menu, select **"Manage cookies"**. Paste the copied text into the `cookies.txt` file that opens and save it.
 #
-# If you downloaded without filling in the cookies.txt it often doesn't work, it will automatically be populated with generic visitor cookies:
-#   - Delete the cookies.txt file from the 'data_Inside' folder.
-#   - Restart the script and select 'Manage cookies' to open cookies.txt and past cookies from your Web browser
-#
-# ---  Example of the first few lines (for illustration only, do not use these) ---
+# ---  Example of few lines (for illustration only, do not use these) ---
 # .youtube.com	TRUE	/	TRUE	1765968483	__Secure-3PSIDTS	sidts-P856YB5TD3P_cmFn23qKz-b42y_AlgokW1kjkk:KARN/q0618JZ4xAA
 # .youtube.com	TRUE	/	TRUE	8442531321	__Secure-ROLLOUT_TOKEN	Cjfyf;fOE-u:ARN!RNA#ARN.JGgfszJKjjly-Jyfz%kj
 #
