@@ -1,191 +1,181 @@
 # ARN-DL
 
-ARN-DL: The user-friendly TUI to reliably download any video/audio. 🔽 Powered by yt-dlp & FFmpeg with smart fallbacks & emulation.
+ARN-DL: The user-friendly tool to download any video/audio. 🔽 Powered by yt-dlp & FFmpeg with smart fallbacks & emulation.
 
-Our straightforward process is powered by a robust backend designed for maximum resilience and quality, wrapped in a unique, retro-inspired terminal interface with a custom audio ambiance.
+| License | GitHub release (latest by date) | Platform |
+|:---:|:---:|:---:|
+| GPL v3 | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ARN-Inside/ARN-DL?style=for-the-badge)](https://github.com/ARN-Inside/ARN-DL/releases/latest) | ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white) |
 
-## Core Features
+![ARN-DL Preview](./Images/GIF_1.gif)
 
-* **Interactive Menu System**: A fully navigable, keyboard-driven interface for a smooth user experience.
-* **Multiple Download Modes**: Choose between downloading `Video`, `Audio Only`, or both `Video + Audio` for any given link.
-* **Selective Quality Profiles**: Select your desired video quality, from `480p` up to `Ultra HD (4K/8K)`, ensuring you get the perfect file for your needs.
-* **Intelligent Format Analysis**: Automatically analyzes available streams to select the best possible video and audio quality based on your preferences.
-* **Advanced Playlist Management**: When a playlist link is entered, the script displays an interactive menu to select all, or specific videos to download.
-* **Multi-Stage Fallback System**: If a download fails, the script automatically retries using different strategies and containers (e.g., from MKV to MP4) to ensure success.
-* **Multi-Client Emulation**: Bypasses regional or device-specific restrictions by emulating various clients (Web, iOS, Android, TV, etc.).
-* **Exhaustive Brute-Force Cascade**: For the most challenging links, this mode systematically attempts every possible quality and client combination until it finds one that works.
-* **Advanced Audio Processing**: Downloads audio in high-fidelity `.wav` (studio-grade 24-bit, 48kHz) or high-bitrate `.mp3` (320kbps).
-* **Post-Download Toolkit**: Includes options for re-encoding MKV files to the more compatible MP4 format and automatically injecting metadata into downloaded files.
-* **Integrated Updater**: Keeps the script and its core dependencies (yt-dlp, FFmpeg) up-to-date with a single command.
-* **Companion Icon Utility**: A batch script is included to create a desktop shortcut, making it easy to launch ARN-DL.
+> ⚠️ **Disclaimer: Please Use Responsibly**
+> While this tool is designed for convenience, downloading content may infringe on creators' rights or violate platform Terms of Service. Automating downloads using personal account cookies is a powerful feature that should be used ethically and at your own risk. Please support creators and respect copyright laws.
 
-## Getting Started
+## 🚀 One-Click Install
+For the vast majority of users, getting started is incredibly simple:
 
-ARN-DL is designed as a portable, self-contained application. The goal is to provide a tool that works out-of-the-box with zero setup, ensuring both ease of use and long-term stability.
+1.  **Double-click `Setup.exe` and you're done.**
+2.  This one-time utility automatically creates desktop and local shortcuts that handle all administrator permissions for you. This provides a seamless, UAC-prompt-free experience every time you launch the application.
 
-* **Instant Usability**: There is no need to manually install dependencies like `yt-dlp` or `FFmpeg`. Everything is included, allowing you to use the application immediately after downloading.
-* **Guaranteed Stability**: By packaging all dependencies directly, we ensure that ARN-DL always runs with a specific, tested set of components. This prevents unexpected bugs or compatibility issues from external updates, guaranteeing a consistent and reliable experience.
 
-### 1. Run the Setup Utility
+## 🍪 Using Cookies (Highly Recommended)
 
-Run the `Setup.exe` file located in the script directory.
+This step is often mandatory to help bypass anti-bot checks, access age-restricted content, and accept cookie banners.
 
-This is a one-time setup utility that will configure ARN-DL for a seamless experience. 
-It creates a desktop shortcut and uses the Windows Task Scheduler to handle administrator permissions automatically. 
-This ensures you won't be prompted by UAC (the administrator approval pop-up) every time you launch the script.
+1.  Use an extension like **"Get cookies.txt LOCALLY"** to copy your browser's cookies.
+    * For the most reliable cookies, first open a new **Private/Incognito** browser window.
+    * Ensure the extension is allowed to run in this mode in your browser's settings.
+    * Log into the desired website (e.g., YouTube) *before* exporting the cookies.
 
-### 2. Launch the Application
+2.  **Import into ARN-DL:** In the script's main menu, select **"Manage cookies"**. Paste the copied text into the `cookies.txt` file that opens and save it.
 
-Double-click the newly created "ARN-DL" desktop icon to start the application.
 
-### 3. Using Cookies (often mandatory)
+## 🏆 The best implementation of YT-DLP
+ARN-DL was built to be more than just a simple GUI. It's a complete, resilient solution designed for power and reliability.
 
-This step allows ARN-DL to download age-restricted content, private videos (from your account), and bypass most "prove you are human" checks.
-For the best results, especially with websites that use anti-bot protections, it is highly recommended to use cookies from your browser.
+| Feature | ARN-DL Implementation | YT-DLG | YT-DLP-GUI |
+| --- | --- | :---: | :---: |
+| **User Experience** | | | |
+| One-Click Install | ✔️ `Setup.exe` handles admin permissions to prevent UAC pop-ups | ❌ | ❌ |
+| Interactive & Artistic TUI | ✔️ Unique, retro TUI fully navigable by keyboard with animations & audio | ❌ | ❌ |
+| Advanced Playlist Management | ✔️ Interactive menu to select/deselect specific videos from a playlist | ❌ | ❌ |
+| Cookie Management | ✔️ Uses browser cookies to download age-restricted or private content | ❌ | ❌ |
+| **Download Reliability** | | | |
+| Intelligent Format Selection | ✔️ Auto-merges the best video (AV1/VP9) & audio (Opus) for max quality | ❌ | ❌ |
+| Multi-Stage Fallback Engine | ✔️ Automatically retries failed downloads with different strategies to ensure success | ❌ | ❌ |
+| Multi-Client Emulation | ✔️ Bypasses regional/device blocks by emulating various clients (phone, TV) | ❌ | ❌ |
+| Exhaustive Brute-Force Mode | ✔️ Last-resort mode that tries every quality/client combination to succeed | ❌ | ❌ |
+| **Media Toolkit** | | | |
+| High-Fidelity Audio Processing | ✔️ Downloads audio .wav (24-bit, 48kHz) or as high-bitrate .mp3 (320kbps) | ❌ | ❌ |
+| High-Quality Re-encoding | ✔️ Easily converts high-quality MKV files into the universal MP4 | ❌ | ❌ |
+| Automatic Metadata Injection | ✔️ Adds "Downloaded by ARN-DL" comment to metadata, helping you to remember us :) | ❌ | ❌ |
+| **Maintenance** | | | |
+| Integrated Updater | ✔️ A built-in Self-Updater of the script and its dependencies (YT-DLP, FFmpeg, FFprobe) | ❌ | ❌ |
 
-1.  When you first run the script, a `cookies.txt` file is created in the same folder.
-2.  Open this file in a text editor and follow the instructions inside to export your browser cookies using a recommended extension like **Get cookies.txt LOCALLY**.
-3.  Paste the exported text into the `cookies.txt` file and save it.
+## 🎵 The ARN Inside Audio Experience
+ARN-DL is more than a tool; it's an experience. The custom audio ambiance, which features the "ARN Inside" brand name, is an integral part of this vision, designed to make every interaction memorable.
 
-**If you downloaded without filling in the `cookies.txt`**: 
-It often doesn't work and will automatically be populated with generic visitor cookies:
-    - Delete the cookies.txt file from the `data_Inside` folder.
-    - Restart the script and select 'Manage cookies' to open `cookies.txt` and past cookies from your Web browser.
+-   **Smart Audio Management**: The audio is designed to be non-intrusive. It **automatically pauses when you minimize the window** and resumes when you return, allowing you to run silent downloads in the background while enjoying the unique atmosphere when interacting with the app.
 
-## TROUBLESHOOTING: MANUAL SHORTCUT CREATION -
+<br>
 
-If the "Setup.exe" fails or the desktop shortcut doesn't work, follow these steps to create a functional shortcut manually.
-
-1.  **Navigate to the Script Folder**:
-    Open the main application folder and go into the `Data_Inside` directory.
-
-2.  **Create a Shortcut to Desktop**:
-    * Locate the `ARN-DL.ps1` file.
-    * Right-click on the `ARN-DL.ps1` file.
-    * Note for Windows 11 users: You may need to click "Show more options" to see the full context menu.
-    * Go to "Send to" and then select "Desktop (create shortcut)".
-
-3.  **Configure the Shortcut Properties**:
-    * Go to your desktop, find the new shortcut, right-click on it, and choose "Properties".
-    * In the "Shortcut" tab, locate the "Target" field.
-    * The `Target` field will already contain the path to the script. You need to add a command in front of it. Click at `Target` field and paste the following text:
-    
-      `C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -NoProfile -File "C:\Users\YOUR_USER_NAME\...\ARN-DL\Data_Inside\ARN-DL.ps1"`
-    
-      * Important: After pasting, you must verify that the file path inside the quotes ("...") correctly points to your ARN-DL.ps1 file.
-
-4.  **Set Administrator Privileges**:
-    * While still in the "Properties" window, click the "Advanced..." button.
-    * Check the box for "Run as administrator" and click "OK".
-
-5.  **Apply and Finish**:
-    * Click "Apply" and then "OK" to save the changes.
-    * You can now rename the shortcut to "ARN-DL" for clarity. Double-clicking this new shortcut will launch the application with the correct settings.
-
-## User Guide: The Download Flow
+<details>
+<summary><strong>📖 User Guide: The Download Flow</strong></summary>
 
 The script guides you through a series of menus to configure your download precisely.
 
 1.  **Main Menu**: After starting, you are presented with the main menu. Here, you can choose to:
-    * Paste a single or multiple links.
-    * Manage cookies (opens `cookies.txt`).
-    * Access the Options menu.
-    * Update the tools or the script itself.
-
+    -   Paste a single or multiple links.
+    -   Manage cookies (opens `cookies.txt`).
+    -   Access the Options menu.
+    -   Update the tools or the script itself.
 2.  **Format Selection Menu**: After providing a link, you'll be asked what you want to download:
-    * **Video**: Downloads the video with its audio track in a single file (MP4 or MKV).
-    * **Audio Only**: Downloads only the audio track and saves it as a high-quality `.wav` or `.mp3` file.
-    * **VIDEO + SEPARATE AUDIO**: Downloads the video file and also creates a separate, high-quality audio file.
-
+    -   `Video`: Downloads the video with its audio track in a single file (MP4 or MKV).
+    -   `Audio Only`: Downloads only the audio track and saves it as a high-quality `.wav` or `.mp3` file.
+    -   `VIDEO + SEPARATE AUDIO`: Downloads the video file and also creates a separate, high-quality audio file.
 3.  **Quality Selection Menu**: Next, you define the quality:
-    * **Video Quality**: Choose a maximum resolution, such as "High (Max 1080p)" or "Ultra (4k, 8k...)". The script will find the best available quality up to that limit.
-    * **Audio Quality**: If you are downloading audio, choose between `.WAV` (lossless, highest quality) and `.MP3` (high-bitrate, smaller file size).
-
+    -   **Video Quality**: Choose a maximum resolution, such as "High (Max 1080p)" or "Ultra (4k, 8k...)". The script will find the best available quality up to that limit.
+    -   **Audio Quality**: If you are downloading audio, choose between `.WAV` (lossless, highest quality) and `.MP3` (high-bitrate, smaller file size).
 4.  **Playlist Selection Menu**: If you enter a link to a playlist, a final menu appears. It lists all the videos in that playlist, allowing you to:
-    * Navigate through the list.
-    * Select or deselect individual videos.
-    * Press 'A' to select or deselect all videos at once.
-    * Press 'V' to validate your selection and begin downloading.
-
-## In-Depth: Core Mechanisms Explained
-
-ARN-DL is built on several layers of technology to ensure a high success rate for downloads.
-
-### Intelligent Format Selection
-
-Instead of just grabbing the "best" format available, the script performs a **Smart Analysis** when you provide a link. It fetches a complete list of all available video and audio streams, then filters them based on your quality selection (e.g., max 1080p). It prioritizes modern, high-quality codecs like AV1/VP9 for video and Opus for audio, which are typically found in separate streams. If these are available, it downloads them and merges them into a high-quality MKV or MP4 container.
-
-### Multi-Stage Fallback Engine
-
-If the initial Smart Analysis fails, the script doesn't just give up. It initiates a fallback sequence:
-1.  **Container Fallback**: If the preferred container (e.g., MKV with Opus audio) fails, it will automatically try a more compatible combination (e.g., MP4 with AAC audio).
-2.  **Generic Fallback**: If specific format selection fails, it will ask for the `bestvideo+bestaudio` streams and attempt to merge them.
-3.  **Last Resort Fallback**: If all else fails, it will attempt to download into the *other* primary container format as a last-ditch effort.
-
-This multi-layered approach ensures that even if one method is blocked, another is likely to succeed.
-
-### Client Emulation
-
-Some websites serve different media files depending on the device making the request. ARN-DL leverages this by cycling through different **client profiles** (like `web`, `ios`, `android`, `tv_embedded`). If a download fails with the default client, it will retry the same request while pretending to be another device, often bypassing blocks that target standard desktop browsers.
-
-### Cookie Management
-
-The script automatically creates and manages a `cookies.txt` file. When this file contains valid, Netscape-formatted cookies, `yt-dlp` will include them with every download request. This makes your requests appear as if they are coming from a logged-in browser session. This is essential for accessing private content, bypassing age-gates, and avoiding CAPTCHA challenges.
-
-### Brute-Force Mode
-
-When Smart Analysis isn't enough, you can enable **Brute-Force Mode**. This is the script's ultimate weapon. It generates a comprehensive list of every possible resolution and codec combination and systematically tries to download each one, iterating through every available client profile for each attempt. While extremely slow, this method is designed to find a working combination for even the most problematic and heavily protected video links.
-
-### Post-Download Processing
-
-Once a file is downloaded, ARN-DL can perform additional tasks:
-* **High-Quality Re-encoding**: If you download a `.mkv` file but need a more compatible `.mp4`, the script can re-encode it using FFmpeg. It uses `libx264` with a quality-focused CRF setting and high-bitrate AAC audio to minimize quality loss.
-* **Metadata Injection**: The script automatically uses FFmpeg to write a "Downloaded by ARN-DL" comment into the file's metadata, making it easy to identify where your files came from.
-
-## A Note on the Integrated Audio Experience
-
-ARN-DL is a labor of love, offered to the community for free. A great deal of effort went into creating not just a functional tool, but also a unique user experience, complete with custom animations and a distinct audio ambiance.
-
-The choice of music is a deliberate tribute to the monumental work of Terry A. Davis. It reflects the project's own creative ambition:
-
-> Terry A. Davis built an entire OS alone, a digital temple dictated by a revelation. Imagine his creative power with today's AI and cloud capabilities. This is the scale of creation I'm aiming for.
-
-To preserve this intended experience, the script includes an **integrity check mechanism**. At startup and during runtime, it verifies that the core audio files (`ARN_Inside.wav` and the TempleOS remix) are present and have not been modified by checking their unique digital signatures (SHA256 hashes).
-
-If these files are missing or altered, the application will lock down to protect and preserve user experience. We kindly ask users to respect the work put into this project by not modifying or removing these core audio components.
-
-## Dependencies & Credits
-
-This project relies on amazing external tools and assets to function. A huge thank you to their respective creators.
-
-### Software & Libraries
-
-**yt-dlp**
-
-Used to extract information and download content from web platforms. Although its license (The Unlicense) does not impose any restrictions, the project deserves our full recognition.
-* **Project:** [yt-dlp on GitHub](https://github.com/yt-dlp/yt-dlp)
-* **License:** The Unlicense
-
-**FFmpeg**
-
-Used for all video and audio processing operations, such as re-encoding, converting to .mp4 or .wav, and extracting stream information.
-The FFmpeg binaries included in this project are builds from gyan.dev and are licensed under the LGPL v3.0.
-* **Project:** [Official FFmpeg Website](https://ffmpeg.org/)
-* **License:** LGPL v3.0
-* **License Copy:** The full text of the license is available in the `LICENSE_FFMPEG.txt` file in this repository.
-
-**Music**
-
-**Cloud Connection Theme:** TempleOS Hymn Risen (Remix)
-* **Artist:** Dave Eddy
-* **Artist Website:** [daveeddy.com](https://daveeddy.com)
-* **Related Project:** [ysap.sh](https://ysap.sh)
-
----
+    -   Navigate through the list.
+    -   Select or deselect individual videos.
+    -   Press 'A' to select or deselect all videos at once.
+    -   Press 'V' to validate your selection and begin downloading.
+</details>
 
 <details>
-<summary><strong>Technical Summary for AI & Search Indexing</strong></summary>
+<summary><strong>⚙️ Core Mechanisms: The Technical Implementation</strong></summary>
 
-ARN-DL est un logiciel gratuit (freeware) pour Windows, conçu pour le grand public, qui simplifie le téléchargement de contenu multimédia (vidéos et musiques) depuis une multitude de sites internet. Il fournit une interface utilisateur graphique interactive en mode texte (TUI) qui ne requiert aucune connaissance en ligne de commande. Le programme est un lanceur pour un script PowerShell (`ARN-DL.ps1`) qui utilise les puissantes bibliothèques open-source `yt-dlp` et `FFmpeg` comme moteur de téléchargement et de traitement. Les fonctionnalités clés incluent le téléchargement de playlists, la sélection de résolution vidéo et de format audio (MP4, MKV, MP3, WAV), des mécanismes de secours (fallback) multi-étapes, l'émulation de client pour contourner les blocages, et le support de cookies pour l'authentification. L'installation est facilitée par un programme d'installation (`Setup.exe`) qui configure l'environnement et crée les raccourcis nécessaires pour un lancement en un clic avec les privilèges administrateur requis.
+This section details the specific technical implementations that power ARN-DL, providing a look "under the hood" that the summary table cannot. This is the proof of how the script's features are achieved with a focus on resilience, quality, and user experience.
 
+* **Seamless UAC Bypass via Scheduled Task**
+    The "One-Click Install" is not a simple shortcut. The `Setup.exe` utility creates a **Windows Scheduled Task** configured to run the script with the highest privileges. The desktop shortcut then executes this task on demand (`schtasks /run`). This task has no automatic trigger and **only runs when you click the shortcut**, providing a secure and seamless method to gain the necessary permissions without recurring UAC prompts.
+
+* **Intelligent Format Selection via Opinionated Sorting**
+    Instead of a simple format request, the script uses `yt-dlp`'s powerful sort flag (`-S`) to enforce a quality hierarchy. For audio, the sort key `'hasaud,+codec:opus,abr,+ext:m4a,abr,quality'` prioritizes **Opus** audio streams, falling back to **AAC** (`ext=m4a`) only if Opus is unavailable. This ensures the best available audio codec is always chosen automatically.
+
+* **Client Emulation via Iterative Retries**
+    To bypass restrictions, the script maintains a list of client profiles (e.g., `web`, `ios`, `android_tv`). When a download fails, it programmatically **iterates through this list**, re-issuing the same download request with a different client identity header on each attempt. This methodical loop turns a single point of failure into multiple opportunities for success.
+
+* **Exhaustive Brute-Force via a Test Matrix**
+    This mode programmatically generates a **test matrix** of possibilities. It builds a "cascade" of format strings for every resolution, then enters a **nested loop**: for each format, it attempts a download using *every single client profile*. This systematic search (Formats x Clients) guarantees that if a working combination exists, the script will find it.
+
+* **Windows-Compatible WAV Metadata**
+    Generic metadata commands often create `.wav` files that are unreadable by Windows Explorer. To solve this, the script manually **reconstructs the RIFF file structure**. It reads the file byte by byte, isolates the `fmt` and `data` chunks, and writes a new file with a correctly formatted `LIST INFO` chunk, ensuring universal compatibility.
+
+* **Responsive UI with a Non-Blocking Input Loop**
+    The UI remains fluid thanks to a custom `Wait-KeyNonBlocking` function. Instead of freezing while waiting for input, it runs a high-frequency loop that checks for key presses (`[System.Console]::KeyAvailable`) while simultaneously updating background animations, creating a responsive, "asynchronous-style" experience.
+
+* **Flicker-Free Console Rendering**
+    The smooth animations are achieved with a double-buffering technique. For each frame, the script builds the next scene in an in-memory array, compares it to the previous frame, and then surgically updates **only the characters that have changed**, eliminating flickering.
+
+
+* **Advanced Playlist Management with Pagination**
+    To handle massive playlists without overwhelming the UI, the script implements a custom pagination system. The `Show-PlaylistSelectionMenu` function slices the full video list into manageable pages of 20 items using PowerShell's `Select-Object -Skip/-First` cmdlets. It maintains a persistent list of selected indices that works **across all pages**, allowing the user to navigate with arrow keys, make granular selections, and select/deselect all, providing complete control over playlists of any size.
+</details>
+
+<details>
+<summary><strong>🛠️ Advanced & Manual Installation</strong></summary>
+
+### Manual Shortcut Creation (Alternative Method)
+This method is for advanced users who prefer not to use the `Setup.exe` utility. It demonstrates that ARN-DL is a self-sufficient PowerShell script.
+
+-   **Important Trade-off**: Using this manual method will cause Windows to show a **UAC (administrator approval) pop-up** *every time you launch the script*. The `Setup.exe` method avoids this for a much smoother user experience.
+
+1.  **Navigate to the Script Folder**: Open the main application folder and go into the `Data_Inside` directory.
+2.  **Create a Shortcut to Desktop**:
+    -   Locate the `ARN-DL.ps1` file. Right-click on it.
+    -   *Note for Windows 11 users*: You may need to click "Show more options".
+    -   Go to "Send to" and then select "Desktop (create shortcut)".
+3.  **Configure the Shortcut Properties**:
+    -   Go to your desktop, find the new shortcut, right-click on it, and choose "Properties".
+    -   In the "Shortcut" tab, locate the "Target" field. You need to add a command **in front of** the existing path.
+    -   Prepend the following text to the "Target" field:
+        ```
+        C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -NoProfile -File
+        ```
+    -   **Important**: After pasting, verify that the full file path inside the quotes (`"..."`) correctly points to your `ARN-DL.ps1` file.
+4.  **Set Administrator Privileges**:
+    -   While still in "Properties", click the "Advanced..." button.
+    -   Check the box for "Run as administrator" and click "OK".
+5.  **Apply and Finish**: Click "Apply" and then "OK". You can now rename the shortcut to "ARN-DL".
+
+</details>
+
+<details>
+<summary><strong>✍️ A Note from the Author: Project Philosophy</strong></summary>
+
+ARN-DL is a labor of love, freely offered to the community after two months of hard work. Considerable effort was expended to create not only a functional tool, but also a unique user experience, striving for "divine perfection"! The musical and aesthetic choices are a deliberate tribute to the monumental work of Terry A. Davis, reflecting the creative ambition of the project:
+
+Terry A. Davis built an entire operating system by himself, a digital temple born from a revelation. Imagine his creative power, augmented by cloud AI, if he were still with us today.
+
+#### About the integrated audio and author signature
+The audio experience is an integral part of ARN-DL's design and brand identity. To preserve this vision, the script includes an author's signature that verifies the integrity of the core audio components. This feature is also a cultural "easter egg." As this project is fully open-source, the code can naturally be modified. This signature therefore acts not as a technical barrier, but as a clear statement of authorial intent and a safeguard for the project's artistic identity.
+
+This project is shared under the GPLv3 license, which grants you extensive freedoms to modify and share the code. However, the spirit of open-source is collaboration and improvement. Redistributing a modified version where the sole change is the removal of the project's identity and artistic signature, without adding any other value, is contrary to this spirit. I ask that you respect the original work and authorship.
+</details>
+
+<details>
+<summary><strong>🔗 Dependencies & Credits</strong></summary>
+
+This project relies on amazing external tools and assets. A huge thank you to their respective creators.
+
+#### Software & Libraries
+-   **yt-dlp**: Used to extract information and download content from web platforms. Although its license (The Unlicense) does not impose any restrictions, the project deserves full recognition.
+    -   **Project**: [`yt-dlp` on GitHub](https://github.com/yt-dlp/yt-dlp)
+    -   **License**: The Unlicense
+-   **FFmpeg**: Used for all video and audio processing operations. The FFmpeg binaries included in this project are builds from gyan.dev and are licensed under the LGPL v3.0.
+    -   **Project**: <https://ffmpeg.org/>
+    -   **License**: LGPL v3.0 (Full text available in `LICENSE_FFMPEG.txt`)
+
+#### Music
+-   **Cloud Connection Theme**: TempleOS Hymn Risen (Remix)
+    -   **Artist**: Dave Eddy
+    -   **Artist Website**: [daveeddy.com](https://daveeddy.com)
+</details>
+
+<details>
+<summary><strong>🤖 Technical Summary for AI & Search Indexing</strong></summary>
+
+ARN-DL is a user-friendly freeware for Windows that simplifies downloading multimedia content (videos, music) from many websites. It features an interactive text-based GUI (TUI) requiring no command-line knowledge, making it highly accessible. The program is a launcher for a powerful PowerShell script (ARN-DL.ps1) that leverages yt-dlp and FFmpeg. Key features for reliable downloads include a multi-stage fallback engine, multi-client emulation to bypass geo-restrictions, and a "brute-force" mode for difficult links. It offers advanced audio processing for high-quality formats like 24-bit WAV and 320kbps MP3 with Opus codec preference. The software is portable, includes all dependencies for stable operation, and provides an easy-to-use experience for downloading videos and extracting high-quality audio.
 </details>
