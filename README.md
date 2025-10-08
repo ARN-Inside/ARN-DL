@@ -118,9 +118,10 @@ This section details the specific technical implementations that power ARN-DL, p
 <summary><strong>🛠️ Advanced & Manual Installation</strong></summary>
 
 ### Manual Shortcut Creation (Alternative Method)
-This method is for advanced users who prefer not to use the `Setup.exe` utility. It demonstrates that ARN-DL is a self-sufficient PowerShell script.
 
--   **Important Trade-off**: Using this manual method will cause Windows to show a **UAC (administrator approval) pop-up** *every time you launch the script*. The `Setup.exe` method avoids this for a much smoother user experience.
+This section is for advanced users or for those who encounter issues with the standard `Setup.exe` installer.
+
+-   **Important Trade-off**: Using this manual method will cause Windows to show a **UAC (administrator approval) pop-up** *every time you launch the script*. The standard installation method avoids this.
 
 1.  **Navigate to the Script Folder**: Open the main application folder and go into the `Data_Inside` directory.
 2.  **Create a Shortcut to Desktop**:
@@ -129,16 +130,18 @@ This method is for advanced users who prefer not to use the `Setup.exe` utility.
     -   Go to "Send to" and then select "Desktop (create shortcut)".
 3.  **Configure the Shortcut Properties**:
     -   Go to your desktop, find the new shortcut, right-click on it, and choose "Properties".
-    -   In the "Shortcut" tab, locate the "Target" field. You need to add a command **in front of** the existing path.
-    -   Prepend the following text to the "Target" field:
+    -   In the "Shortcut" tab, locate the "Target" field. You must **replace its entire content** with the command below.
+    -   Copy and paste the following full command into the "Target" field, which includes an example path:
         ```
-        C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -NoProfile -File
+        C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -NoProfile -File "C:\Users\YOUR_USER_NAME\...\Data_Inside\ARN-DL.ps1"
         ```
-    -   **Important**: After pasting, verify that the full file path inside the quotes (`"..."`) correctly points to your `ARN-DL.ps1` file.
+    -   **CRITICAL:** You must now manually edit the example path to match the **exact location** of your `ARN-DL.ps1` file.
+
 4.  **Set Administrator Privileges**:
     -   While still in "Properties", click the "Advanced..." button.
     -   Check the box for "Run as administrator" and click "OK".
 5.  **Apply and Finish**: Click "Apply" and then "OK". You can now rename the shortcut to "ARN-DL".
+
 
 </details>
 
