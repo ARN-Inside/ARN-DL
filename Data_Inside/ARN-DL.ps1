@@ -1910,7 +1910,7 @@ Performs a slower, more intensive re-encode using high-bitrate AAC audio (320kbp
 Bypasses smart analysis to try every possible format and client.
 Warning: This method is extremely slow and should only be used as a last resort if other options fail.
 "@ }
-            default { $helpText = "Survolez une option pour voir sa description." }
+            default { $helpText = "Hover over an option to see its description." }
         }
         Write-Centered "----------------------------------------------------------------" "DarkGray"
         Write-Centered $helpText "Gray"
@@ -2238,7 +2238,8 @@ function Download-Flow {
         Write-Host ""
         Write-MatrixBanner -Lines 4 -Context "Analysis"
         Write-Host ""
-        Write-Centered "🔎 Analyzing URL: $url" "Cyan";
+        Write-Centered "🔎 Analyzing URL: $url" "Cyan"
+        Write-Centered "This may take several minutes... (or longer if it's a large playlist.)" "Yellow"
         Write-Host ""
 
         $allVideosInPlaylist = Resolve-URLVideoEntries -Url $url
