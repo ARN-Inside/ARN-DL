@@ -6,7 +6,7 @@ ARN-DL: The user-friendly tool to download any video/audio. 🔽 Powered by yt-d
 |:---:|:---:|:---:|
 | GPL v3 | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ARN-Inside/ARN-DL?style=for-the-badge)](https://github.com/ARN-Inside/ARN-DL/releases/latest) | ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white) |
 
-![ARN-DL Preview](./Images/GIF_1.gif)
+![ARN-DL Preview](./Images/ARN-DL_Demo.gif)
 
 > ⚠️ **Disclaimer: Please Use Responsibly**
 > While this tool is designed for convenience, downloading content may infringe on creators' rights or violate platform Terms of Service. Automating downloads using personal account cookies is a powerful feature that should be used ethically and at your own risk. Please support creators and respect copyright laws.
