@@ -45,7 +45,7 @@ $script:ReencodeAudioBitrate = '320k'
 # END OF DEFAULT CONFIGURATION SETTINGS
 #==============================================================================
 
-$script:Version = "1.1.0"
+$script:Version = "1.1.1"
 
 $script:integrityFailureReported = $false
 
