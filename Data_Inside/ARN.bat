@@ -12,4 +12,4 @@ if '%errorlevel%' NEQ '0' (
 
 :: 3. If we are here, we have admin privileges. Run the PowerShell script in this black window.
 :: The .ps1 script is in the same folder as this launcher.
-powershell.exe -NoExit -NoProfile -ExecutionPolicy Bypass -File "%~dp0ARN-DL.ps1"
+start "ARN-DL | AlgoRythmic.Network" /max powershell.exe -NoExit -NoProfile -ExecutionPolicy Bypass -File "%~dp0ARN-DL.ps1"

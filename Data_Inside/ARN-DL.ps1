@@ -248,7 +248,7 @@ function Show-HelixAnimation {
 #>
 param(
     [string]$Text = "ARN ARN ARN Inside ",
-    [int]$DurationSeconds = 10,
+    [double]$DurationSeconds = .0,
     # Colors are simple strings to avoid errors.
     [string]$ColorDNA1 = "Cyan",
     [string]$ColorDNA2 = "DarkBlue",
@@ -295,7 +295,7 @@ try {
     
     # Center points for 3D -> 2D projection.
     $centerX = $width / 2
-    $centerY = $height / 2
+    $centerY = 5
 
     # Create in-memory buffers for flicker-free rendering.
     $currentBuffer = New-Object 'psobject[,]' $width, $height
@@ -327,8 +327,12 @@ try {
             }
         }
 
-        # Iterate on the 't' parameter to generate the helix points.
-        for ($t = 0; $t -lt (2 * $height); $t += 0.2) {
+        $effectiveDisplayHeight = $height - $centerY;
+        if ($effectiveDisplayHeight -le 0) { $effectiveDisplayHeight = 1 } 
+        $t_range_for_display = $effectiveDisplayHeight / $Pitch;
+        $t_start = ($verticalOffset / $Pitch) - ($t_range_for_display / 2);
+        $t_end = $t_start + $t_range_for_display;
+        for ($t = $t_start; $t -lt $t_end; $t += 0.2) {
             
             # Calculate 3D coordinates for the two strands.
             $angle1 = $Frequency * $t + $rotationOffset
