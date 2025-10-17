@@ -39,7 +39,7 @@ ARN-DL was built to be more than just a simple GUI. It's a complete, resilient s
 | One-Click Install | ✔️ `Setup.exe` handles admin permissions to prevent UAC pop-ups | ❌ | ❌ |
 | Interactive & Artistic TUI | ✔️ Unique, retro TUI fully navigable by keyboard with animations & audio | ❌ | ❌ |
 | Advanced Playlist Management | ✔️ Interactive menu to select/deselect specific videos from a playlist | ❌ | ❌ |
-| Cookie Management | ✔️ Uses browser cookies to download age-restricted or private content | ❌ | ❌ |
+| Cookie Management | ✔️ Uses browser cookies to bypass anti-bot potection, age-restriction or accept cookie banners | ❌ | ❌ |
 | **Download Reliability** | | | |
 | Intelligent Format Selection | ✔️ Auto-merges the best video (AV1/VP9) & audio (Opus) for max quality | ❌ | ❌ |
 | Multi-Stage Fallback Engine | ✔️ Automatically retries failed downloads with different strategies to ensure success | ❌ | ❌ |
