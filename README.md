@@ -43,7 +43,7 @@ ARN-DL was built to be more than just a simple GUI. It's a complete, resilient s
 | **Download Reliability** | | | |
 | Intelligent Format Selection | ✔️ Auto-merges the best video (AV1/VP9) & audio (Opus) for max quality | ❌ | ❌ |
 | Multi-Stage Fallback Engine | ✔️ Automatically retries failed downloads with different strategies to ensure success | ❌ | ❌ |
-| Multi-Client Emulation | ✔️ Bypasses regional/device blocks by emulating various clients (phone, TV) | ❌ | ❌ |
+| Multi-Client Emulation | ✔️ Bypass device-specific quality restrictions by emulating various clients (phone, TV) | ❌ | ❌ |
 | Exhaustive Brute-Force Mode | ✔️ Last-resort mode that tries every quality/client combination to succeed | ❌ | ❌ |
 | **Media Toolkit** | | | |
 | High-Fidelity Audio Processing | ✔️ Downloads audio .wav (24-bit, 48kHz) or as high-bitrate .mp3 (320kbps) | ❌ | ❌ |
@@ -95,7 +95,7 @@ This section details the specific technical implementations that power ARN-DL, p
     Instead of a simple format request, the script uses `yt-dlp`'s powerful sort flag (`-S`) to enforce a quality hierarchy. For audio, the sort key `'hasaud,+codec:opus,abr,+ext:m4a,abr,quality'` prioritizes **Opus** audio streams, falling back to **AAC** (`ext=m4a`) only if Opus is unavailable. This ensures the best available audio codec is always chosen automatically.
 
 * **Client Emulation via Iterative Retries**
-    To bypass restrictions, the script maintains a list of client profiles (e.g., `web`, `ios`, `android_tv`). When a download fails, it programmatically **iterates through this list**, re-issuing the same download request with a different client identity header on each attempt. This methodical loop turns a single point of failure into multiple opportunities for success.
+    To bypass device-specific quality restrictions by emulating various clients (phone, TV)restrictions, the script maintains a list of client profiles (e.g., `web`, `ios`, `android_tv`). When a download fails, it programmatically **iterates through this list**, re-issuing the same download request with a different client identity header on each attempt. This methodical loop turns a single point of failure into multiple opportunities for success.
 
 * **Exhaustive Brute-Force via a Test Matrix**
     This mode programmatically generates a **test matrix** of possibilities. It builds a "cascade" of format strings for every resolution, then enters a **nested loop**: for each format, it attempts a download using *every single client profile*. This systematic search (Formats x Clients) guarantees that if a working combination exists, the script will find it.
